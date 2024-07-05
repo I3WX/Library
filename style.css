@@ -61,15 +61,23 @@ html {
     border: solid 5px var(--Dark_Gray);
     border-radius: 15px;
     background: var(--Soft_Gray);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto); 
+    gap: 20px; 
+    padding: 20px; 
 }
+
 
 .book {
     border: solid 5px var(--Dark_Gray);
-    border-radius: 15px;
-    height: 45%;
-    width: 20%;
     background-color: var(--Beige);
+    border-radius: 15px;
+    height: 100%;
+    width: 100%;
     margin: 1%;
+    display: grid;
+    place-items: center;
 }
 
 #addBook {
@@ -92,4 +100,102 @@ html {
 
 #addBook button:hover {
     background-color: var(--Soft_Brown);
+}
+
+.book .name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.book .author, .book .pages {
+    font-size: 1.1rem;
+    color: var(--Dark_Gray);
+}
+
+#form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none; 
+    border: solid 5px var(--Dark_Gray);
+    background-color: var(--Beige);
+    border-radius: 15px;
+}
+
+#form.active {
+    display: block;
+}
+
+#InputForm {
+    position: relative;
+}
+
+#formHeadding {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--Dark_Gray);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+#formHeadding button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--Dark_Gray);
+}
+
+#bookForm {
+    display: grid;
+    gap: 10px;
+}
+
+#bookForm input[type="text"],
+#bookForm input[type="number"],
+#bookForm button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--Dark_Gray);
+    border-radius: 5px;
+}
+
+#bookForm button[type="submit"] {
+    background-color: var(--Rich_Brown);
+    color: var(--Beige);
+    cursor: pointer;
+}
+
+#bookForm button[type="submit"]:hover {
+    background-color: var(--Soft_Brown);
+}
+
+#blurOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+    z-index: 999; 
+    transition: opacity 0.3s ease;
+}
+
+#form.active ~ #blurOverlay {
+    opacity: 1;
+}
+#form:not(.active) ~ #blurOverlay{
+    opacity: 0;
 }
