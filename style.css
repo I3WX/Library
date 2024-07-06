@@ -23,6 +23,8 @@ html {
 
 .page {
     scroll-snap-align: start;
+    height: var(--height);
+    width: var(--width);
 }
 
 #container {
@@ -47,7 +49,7 @@ html {
     color: var(--Rich_Brown);
 }
 
-#box {
+.box {
     height: var(--height);
     width: var(--width);
     display: grid;
@@ -55,7 +57,7 @@ html {
     background-color: var(--Cream);
 }
 
-#innerBox {
+.innerBox {
     height: 80%;
     width: 90%;
     border: solid 5px var(--Dark_Gray);
@@ -103,14 +105,15 @@ html {
 }
 
 .book .name {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .book .author, .book .pages {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: var(--Dark_Gray);
+    font-weight: 700;
 }
 
 #form {
