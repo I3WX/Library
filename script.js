@@ -6,8 +6,10 @@ const bookNameInput = document.getElementById('bookName');
 const authorInput = document.getElementById('author');
 const pagesInput = document.getElementById('pages');
 const container = document.getElementById('container');
+let currentBox = document.querySelector('#innerBox'); // The current container for books
 
-let currentBox = document.querySelector('.innerBox'); // The current container for books
+let books = [];
+const storageKey = "BOOKS";
 
 // Function to add a new book
 const addNewBook = () => {
@@ -15,53 +17,17 @@ const addNewBook = () => {
     const authorName = authorInput.value;
     const noOfPages = pagesInput.value;
 
+    books.push([bookName, authorName, noOfPages]);
+    renderItems();
+    // Save the book to localStorage
+    saveData(bookName, authorName, noOfPages);
 
-        // Create a new book element with the provided details
-        const newBook = document.createElement('div');
-        newBook.classList.add('book');
-        newBook.innerHTML = `
-            <div class="name">${bookName}</div>
-            <div class="author">${authorName}</div>
-            <div class="pages">${noOfPages} Pages</div>
-        `;
-
-        // Check if the current box has less than 6 children
-        if (currentBox.children.length < 6) {
-            // Insert the new book before the "Add Book" button
-            currentBox.insertBefore(newBook, addBookButton.closest('.book'));
-        } else {
-            // Replace the "Add Book" button with the new book in the current box
-            addBookButton.closest('.book').replaceWith(newBook);
-
-            // Create a new box (page) to hold additional books
-            const newBox = document.createElement('div');
-            newBox.classList.add('page', 'box');
-            newBox.innerHTML = `
-                <div class="innerBox">
-                    <!-- Add Book button -->
-                    <div id="addBook" class="book">
-                        <button>Add Book</button>
-                    </div>
-                </div>
-            `;
-
-            // Append the new box to the container
-            container.appendChild(newBox);
-            currentBox = newBox.querySelector('.innerBox'); // Update current box to the new one
-
-            // Update the "Add Book" button to the new page
-            addBookButton = currentBox.querySelector('#addBook button');
-            addBookButton.addEventListener('click', () => {
-                form.classList.add('active'); // Show the form
-            });
-        }
-
-        // Reset the form fields and close the form
-        form.classList.remove('active');
-        bookNameInput.value = '';
-        authorInput.value = '';
-        pagesInput.value = '';
-    } ;
+    // Reset the form fields and close the form
+    form.classList.remove('active');
+    bookNameInput.value = '';
+    authorInput.value = '';
+    pagesInput.value = '';
+};
 
 // Show the form when "Add Book" button is clicked
 addBookButton.addEventListener('click', () => {
@@ -78,3 +44,49 @@ form.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent the default form submission
     addNewBook();
 });
+
+// Function to save data to localStorage
+function saveData(bookName, authorName, noOfPages) {
+    books.push([bookName, authorName, noOfPages]);
+    localStorage.setItem(storageKey, JSON.stringify(books));
+}
+
+// Function to load items from localStorage
+function loadItems() {
+    const storedBooks = localStorage.getItem(storageKey);
+    if (storedBooks) {
+        books = JSON.parse(storedBooks);
+        renderItems();
+    }
+}
+
+// Function to render items from books array
+function renderItems() {
+    currentBox.innerHTML = ''; // Clear current content before rendering
+    books.forEach(([bookName, authorName, noOfPages]) => {
+        const newBook = document.createElement('div');
+        newBook.classList.add('book');
+        newBook.innerHTML = `
+            <div class="name">${bookName}</div>
+            <div class="author">${authorName}</div>
+            <div class="pages">${noOfPages} Pages</div>
+        `;
+        currentBox.appendChild(newBook);
+    });
+
+    // Create the "Add Book" button outside the loop
+    const addBookBtn = document.createElement('button');
+    const addBookdiv = document.createElement('div');
+    addBookdiv.classList.add('book');
+    addBookBtn.innerHTML = 'Add Book';
+    addBookdiv.id = 'addBook';
+    addBookBtn.textContent = 'Add Book';
+    addBookBtn.addEventListener('click', () => {
+        form.classList.add('active');
+    });
+    addBookdiv.appendChild(addBookBtn);
+    currentBox.appendChild(addBookdiv);
+}
+
+// Load items from localStorage when the DOM content is loaded
+document.addEventListener('DOMContentLoaded', loadItems);
