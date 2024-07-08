@@ -1,12 +1,11 @@
 // Select necessary elements from the DOM
-let addBookButton = document.querySelector('.addBookBtn');
-let clearBookButton = document.querySelector('.clearBookBtn');
+let addBookButton = document.getElementById('addBookBtn');
+let clearBookButton = document.getElementById('clearBookBtn');
 const form = document.querySelector('#form');
 const closeButton = document.querySelector('#closeButton');
 const bookNameInput = document.getElementById('bookName');
 const authorInput = document.getElementById('author');
 const pagesInput = document.getElementById('pages');
-const container = document.getElementById('container');
 let currentBox = document.querySelector('#innerBox'); // The current container for books
 
 let books = [];
@@ -35,10 +34,15 @@ addBookButton.addEventListener('click', () => {
     form.classList.add('active');
 });
 
-clearBookButton.addEventListener('click' , ()=>{
-    localStorage.clear()
-    renderItems()
-})
+// Function to clear all books and reset localStorage
+function clearBook() {
+    books = [];
+    localStorage.removeItem(storageKey);
+    renderItems();
+}
+
+// Clear all books and reset localStorage
+clearBookButton.addEventListener('click', clearBook);
 
 // Hide the form when the close button is clicked
 closeButton.addEventListener('click', () => {
@@ -79,26 +83,21 @@ function renderItems() {
         currentBox.appendChild(newBook);
     });
 
-    // Create the "Add Book" button outside the loop
-    const addBookdiv = document.createElement('div');
-    addBookdiv.classList.add('book');
-    addBookdiv.id = 'addBook';
+    // Add the "Add Book" and "Clear All Books" buttons at the end
+    const addBookDiv = document.createElement('div');
+    addBookDiv.classList.add('book');
+    addBookDiv.id = 'addBook';
     const addBookBtn = document.createElement('button');
     const clearBookBtn = document.createElement('button');
-    addBookBtn.id = 'addBookBtn'
-    clearBookBtn.id = 'clearBookBtn'
-    clearBookBtn.innerHTML = 'clear all book'
+    addBookBtn.id = 'addBookBtn';
+    clearBookBtn.id = 'clearBookBtn';
+    clearBookBtn.innerHTML = 'Clear All Books';
     addBookBtn.innerHTML = 'Add Book';
-    addBookBtn.addEventListener('click', () => {
-        form.classList.add('active');
-    });
-    clearBookBtn.addEventListener('click' , ()=>{
-        localStorage.clear()
-        renderItems()
-    })
-    addBookdiv.appendChild(addBookBtn);
-    addBookdiv.appendChild(clearBookBtn);
-    currentBox.appendChild(addBookdiv);
+    clearBookBtn.addEventListener('click', clearBook); // Fix here
+    addBookBtn.addEventListener('click', () => { form.classList.add('active'); });
+    addBookDiv.appendChild(addBookBtn);
+    addBookDiv.appendChild(clearBookBtn);
+    currentBox.appendChild(addBookDiv);
 }
 
 // Load items from localStorage when the DOM content is loaded
